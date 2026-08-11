@@ -1,0 +1,17 @@
+---
+name: {{name}}
+description: {{description}}
+---
+
+# {{title}}
+
+## Workflow
+
+1. Confirm the required inputs and success criteria.
+2. Perform the task using only the resources needed for this request.
+3. Validate the result and report any unresolved limitation.
+
+## Output
+
+Return the completed artifact or result with concise validation evidence.
+
