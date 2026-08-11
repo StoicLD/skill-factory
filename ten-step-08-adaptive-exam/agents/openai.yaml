@@ -1,0 +1,6 @@
+interface:
+  display_name: "十步学习 · 08 自适应考试"
+  short_description: "Take an adaptive exam with one question per turn"
+  default_prompt: "Use $ten-step-08-adaptive-exam to examine me on [topic] one question at a time without revealing answers early."
+policy:
+  allow_implicit_invocation: false

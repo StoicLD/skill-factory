@@ -1,0 +1,6 @@
+interface:
+  display_name: "十步学习 · 07 核心冲刺"
+  short_description: "Run a two-hour core sprint one micro-lesson at a time"
+  default_prompt: "Use $ten-step-07-core-sprint to teach me the highest-leverage 20 percent of [topic], one micro-lesson at a time."
+policy:
+  allow_implicit_invocation: false

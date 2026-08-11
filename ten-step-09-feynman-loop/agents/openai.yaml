@@ -1,0 +1,6 @@
+interface:
+  display_name: "十步学习 · 09 费曼循环"
+  short_description: "Test understanding through an iterative Feynman loop"
+  default_prompt: "Use $ten-step-09-feynman-loop to test my explanation of [concept] and repair one gap at a time."
+policy:
+  allow_implicit_invocation: false

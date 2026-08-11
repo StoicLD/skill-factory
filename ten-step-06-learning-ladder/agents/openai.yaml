@@ -1,0 +1,6 @@
+interface:
+  display_name: "十步学习 · 06 学习阶梯"
+  short_description: "Diagnose your level with a five-rung learning ladder"
+  default_prompt: "Use $ten-step-06-learning-ladder to diagnose my current level in [topic] and give me one next milestone."
+policy:
+  allow_implicit_invocation: false
