@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="核心百分之二十微课冲刺">
+  <rect width="128" height="128" rx="28" fill="#111247"/>
+  <path d="m64 20 30 18 10 34-22 30H46L24 72l10-34 30-18Z" fill="#7567F8"/>
+  <path d="m64 31 18 11 6 21-13 18H53L40 63l6-21 18-11Z" fill="#2FC3F4"/>
+  <path d="m69 39-20 30h14l-5 22 22-34H66l3-18Z" fill="#FFD15C"/>
+  <circle cx="64" cy="64" r="43" fill="none" stroke="#FDF8E7" stroke-width="5" stroke-dasharray="8 9"/>
+</svg>

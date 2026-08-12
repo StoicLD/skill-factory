@@ -1,6 +1,9 @@
 interface:
-  display_name: "十步学习 · 07 核心冲刺"
-  short_description: "Run a two-hour core sprint one micro-lesson at a time"
-  default_prompt: "Use $ten-step-07-core-sprint to teach me the highest-leverage 20 percent of [topic], one micro-lesson at a time."
+  display_name: "十步学习方法 · 07 核心 20% 微课冲刺"
+  short_description: "提炼最关键的 20%，通过十节微课、练习和主动回忆逐轮掌握"
+  icon_small: "./assets/step-icon.svg"
+  icon_large: "./assets/step-icon.svg"
+  brand_color: "#7567F8"
+  default_prompt: "使用 $ten-step-07-core-sprint 带我通过十节微课掌握 [主题] 最关键的 20%。"
 policy:
   allow_implicit_invocation: false

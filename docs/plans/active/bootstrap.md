@@ -1,6 +1,6 @@
 # Bootstrap plan
 
-Status: first portable Skill suite implemented and validated
+Status: first portable Skill suite branded, packaged, and validated
 Started: 2026-08-11
 
 ## Completed in initialization
@@ -17,9 +17,10 @@ Started: 2026-08-11
 - Added explicit-only steps 6-9 as four independently installable interactive Skills.
 - Added Codex/ChatGPT interface metadata, a self-contained report template, a zero-dependency report validator, consistent checkpoint contracts, and suite behavior tests.
 - Recorded trigger, automated, and forward-test evidence in `docs/quality/ten-step-suite-validation.md`.
+- Branded the suite as `Ten-step-learning` with the Chinese name `十步学习方法`, five ordered Chinese Skill entries, a wisdom-familiar Plugin logo, and five distinct step icons.
+- Added an authoritative clean-build command at `scripts/build_ten_step_learning_plugin.ps1`; it generates the disposable local Marketplace under `../codex-plugin/ten-step-learning-suite/` and validates the complete Plugin.
 
 ## Next product work
 
-1. Confirm the five named entries in a live Codex `/skills` picker when an executable CLI or IDE session is available.
+1. Reinstall the generated `1.1.0` Plugin from `ten-step-learning-local` in an unrestricted Codex session and confirm the new logo, descriptions, icons, and five named entries in a new task.
 2. Forward-test Claude, Cursor, and WorkBuddy/CodeBuddy before claiming behavioral parity.
-3. Package the five independent Skills as one plugin only when distribution is requested.

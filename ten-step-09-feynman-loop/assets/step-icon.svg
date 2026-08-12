@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="费曼解释纠错循环">
+  <rect width="128" height="128" rx="28" fill="#111247"/>
+  <path d="M22 30h58a12 12 0 0 1 12 12v26a12 12 0 0 1-12 12H48L31 94V80h-9a12 12 0 0 1-12-12V42a12 12 0 0 1 12-12Z" fill="#FDF8E7"/>
+  <path d="M57 54h47a12 12 0 0 1 12 12v21a12 12 0 0 1-12 12H88l-14 12V99H57a12 12 0 0 1-12-12V66a12 12 0 0 1 12-12Z" fill="#7567F8" stroke="#111247" stroke-width="5"/>
+  <path d="M28 50h44M28 62h28" stroke="#2FC3F4" stroke-width="6" stroke-linecap="round"/>
+  <path d="M66 73h30M66 84h20" stroke="#FDF8E7" stroke-width="6" stroke-linecap="round"/>
+  <path d="m100 22 3 7 7 3-7 3-3 7-3-7-7-3 7-3 3-7Z" fill="#FFD15C"/>
+</svg>

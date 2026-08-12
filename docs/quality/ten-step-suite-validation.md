@@ -1,7 +1,7 @@
 # Ten-step Skill suite validation
 
-Status: implementation and available forward validation complete
-Date: 2026-08-11
+Status: implementation, branding, packaging, and available forward validation complete
+Date: 2026-08-12
 
 ## Artifacts under validation
 
@@ -12,6 +12,8 @@ Date: 2026-08-11
 - `ten-step-09-feynman-loop`: explicit-only explain-diagnose-reteach loop.
 
 The implementation is independently written from the user-supplied article and the public Daliu-Awesome-Skills repository. The upstream repository exposed no root license when checked on 2026-08-11, so its prompt text, code, and HTML template were not copied.
+
+The Plugin uses the user-facing brand `Ten-step-learning` and Chinese name `十步学习方法`. Its five UI entries sort as `01–10`, `06`, `07`, `08`, and `09`. The internal Plugin ID, Marketplace name, and five Skill names remain stable for compatibility.
 
 ## Trigger matrix
 
@@ -53,17 +55,19 @@ python -B -m unittest discover -s tests -v
 python -B -m py_compile ten-step-learning-report/scripts/validate_report.py
 ```
 
-Current result: five Skill directories pass structural validation; fourteen unit tests pass. Tests cover unique display metadata, explicit invocation policy, default prompts, checkpoint fields, answer protection, learner-first Feynman behavior, template placeholders, and report validation success/failure paths.
+Current result: five Skill directories pass structural validation and the built-in Skill quick validator; eighteen unit tests pass. Tests cover ordered Chinese display metadata, explicit invocation policy, default prompts, distinct icon paths, Plugin brand metadata, PNG dimensions, clean-build safeguards, checkpoint fields, answer protection, learner-first Feynman behavior, template placeholders, and report validation success/failure paths.
+
+The authoritative clean-build command generated Plugin version `1.1.0` under `../codex-plugin/ten-step-learning-suite/`. A sentinel placed in the prior build was removed, proving clean replacement. The resulting local Marketplace contained 28 files, all five Skill directories, three Plugin PNG assets, and five Skill SVG icons. Source-to-package SHA-256 comparisons, packaged Skill validation, and the built-in Codex Plugin validator passed.
 
 ## Forward evidence
 
 - Adaptive exam, two turns: passed. With a bounded intermediate TCP congestion-control request, the Skill stated scope and stopping rule, then asked one question without revealing an answer, rubric, or future question. After a deliberately incorrect answer it scored 3/10, cited the demonstrated fragment, corrected the `ssthresh` and AIMD errors, kept difficulty stable, and asked a targeted variant.
 - Feynman loop, two turns: passed. With a CAP theorem request, the Skill asked the learner to explain, provide an example, describe the tradeoff, and name a boundary before offering instruction. After an overgeneralized answer it isolated the missing partition boundary, gave a minimal scenario hint, and requested a revised explanation rather than replacing the learner's work with a lecture.
 - Full HTML report: passed. An isolated SQL JOIN run produced a 54,912-byte self-contained report with all ten required step IDs, no unresolved placeholders, nine normalized sources, and all four continuation invocations. The report validator rejected the intermediate template before the step body was inserted and accepted the completed file afterward, demonstrating that the completion gate catches partial artifacts.
-- Live Codex `/skills` picker discovery: not yet verified. The installed desktop-app executable is visible but cannot be launched from the current restricted Windows process (`Access denied`). Static adapter and discovery-location contracts are verified; do not claim live picker validation until a usable Codex CLI/IDE session confirms it.
+- Live Codex `1.1.0` installation and `/skills` picker discovery: not yet verified. The installed desktop-app executable is visible but cannot be launched from the current restricted Windows process (`Access denied`), and the Computer Use policy prohibits automating the Codex/ChatGPT desktop UI. Static adapter, local Marketplace, build, asset, and discovery-location contracts are verified; do not claim the redesigned picker or Plugin page is live-verified until an unrestricted Codex session reinstalls the Plugin and confirms it in a new task.
 
 ## Host status
 
 - Portable structure: validated against the repository contract.
-- Codex/ChatGPT adapter: statically validated; report and interactive behavior forward-tested; live `/skills` picker pending.
+- Codex/ChatGPT adapter: statically validated; report and interactive behavior forward-tested; installable `1.1.0` Plugin package validated; redesigned live Plugin page and `/skills` picker pending.
 - Claude, Cursor, WorkBuddy/CodeBuddy: unverified. Do not claim behavioral parity until a forward task succeeds on each host.

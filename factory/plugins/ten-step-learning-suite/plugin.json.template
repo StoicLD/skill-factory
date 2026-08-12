@@ -1,0 +1,36 @@
+{
+  "name": "ten-step-learning-suite",
+  "version": "1.1.0",
+  "description": "Generate a complete ten-step learning report or explicitly run interactive learning steps 6 through 9.",
+  "author": {
+    "name": "Skill Factory"
+  },
+  "keywords": [
+    "learning",
+    "education",
+    "adaptive-exam",
+    "feynman-technique",
+    "study-plan"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Ten-step-learning",
+    "shortDescription": "十步学习方法：完整十步学习报告与步骤 06–09 互动学习",
+    "longDescription": "十步学习方法提供两种使用方式：一次完成 01–10 的完整学习报告，或单独进入步骤 06–09 进行互动训练。完整流程依次包括：01 多视角调研、02 矛盾图谱、03 综合简报、04 同行评审、05 资源筛选、06 学习阶梯、07 核心 20%、08 自测与考试、09 费曼讲解、10 速查表。",
+    "developerName": "Skill Factory",
+    "category": "Productivity",
+    "capabilities": [
+      "Interactive",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "$ten-step-learning-report 为 [主题] 生成完整的 01–10 十步学习报告",
+      "$ten-step-06-learning-ladder 用一个真实任务诊断我学习 [主题] 的当前阶段",
+      "$ten-step-09-feynman-loop 先让我解释 [概念]，再逐轮指出并修正缺口"
+    ],
+    "brandColor": "#7567F8",
+    "composerIcon": "./assets/icon.png",
+    "logo": "./assets/logo.png",
+    "logoDark": "./assets/logo-dark.png"
+  }
+}

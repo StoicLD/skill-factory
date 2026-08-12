@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="完整十步学习报告">
+  <rect width="128" height="128" rx="28" fill="#111247"/>
+  <path d="M22 35c16-5 29 0 42 12v52C51 87 38 82 22 87V35Z" fill="#FDF8E7"/>
+  <path d="M106 35c-16-5-29 0-42 12v52c13-12 26-17 42-12V35Z" fill="#EEF8FF"/>
+  <path d="M64 47v52" stroke="#7567F8" stroke-width="6" stroke-linecap="round"/>
+  <path d="m88 18 4 9 9 4-9 4-4 9-4-9-9-4 9-4 4-9Z" fill="#FFD15C"/>
+  <path d="M30 46c10-1 18 2 26 8M30 59c10-1 18 2 26 8M98 46c-10-1-18 2-26 8M98 59c-10-1-18 2-26 8" fill="none" stroke="#2FC3F4" stroke-width="4" stroke-linecap="round"/>
+</svg>

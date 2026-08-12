@@ -1,6 +1,9 @@
 interface:
-  display_name: "十步学习 · 09 费曼循环"
-  short_description: "Test understanding through an iterative Feynman loop"
-  default_prompt: "Use $ten-step-09-feynman-loop to test my explanation of [concept] and repair one gap at a time."
+  display_name: "十步学习方法 · 09 费曼解释纠错"
+  short_description: "先用自己的话解释；AI 定位理解缺口，并用最小提示推动重讲"
+  icon_small: "./assets/step-icon.svg"
+  icon_large: "./assets/step-icon.svg"
+  brand_color: "#7567F8"
+  default_prompt: "使用 $ten-step-09-feynman-loop 先让我解释 [概念]，再逐轮指出并修正缺口。"
 policy:
   allow_implicit_invocation: false

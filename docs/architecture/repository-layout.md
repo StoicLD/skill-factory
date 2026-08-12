@@ -7,7 +7,8 @@ project/
 ├── AGENTS.md
 ├── docs/                  # Product specifications, decisions, plans, quality gates
 ├── factory/
-│   └── templates/         # Non-discoverable source templates; no file named SKILL.md
+│   ├── templates/         # Non-discoverable Skill templates; no file named SKILL.md
+│   └── plugins/           # Authoritative Plugin manifests and brand assets
 ├── scripts/               # Factory commands
 ├── tests/                 # Factory command tests
 └── <skill-name>/          # One independently distributable skill
@@ -26,6 +27,6 @@ project/
 - A skill must not depend on this repository's `docs/`, `factory/`, `scripts/`, or sibling skills at runtime.
 - Shared facts may be used while authoring, but release artifacts must carry their own required references or scripts.
 - Factory templates use names such as `SKILL.md.template` so hosts do not accidentally discover them as runnable skills.
+- Plugin distribution sources live under `factory/plugins/`; generated marketplaces and installable Plugin trees live outside this repository and may be deleted before every build.
 
 Reserved root directories are `docs`, `factory`, `scripts`, and `tests`. Any other visible root directory is treated as a skill candidate by the local validator.
-

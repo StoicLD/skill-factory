@@ -1,19 +1,19 @@
 ---
 name: ten-step-08-adaptive-exam
-description: "Run step 8 of the ten-step learning method as an adaptive one-question-at-a-time examination with scoring and remediation. Use only when the user explicitly selects or names ten-step-08-adaptive-exam; never activate implicitly from an ordinary question."
+description: "执行十步学习方法的第 08 步：每轮只出一道题，答后评分、纠正具体缺口，并依据表现动态升降难度。仅当用户通过 /skills 选择或显式调用 ten-step-08-adaptive-exam 时使用；绝不从普通问题中隐式启动。"
 ---
 
-# Step 08: adaptive exam
+# 十步学习方法：08 自适应逐题考试
 
 Run only after explicit selection or mention of `$ten-step-08-adaptive-exam`. Measure recall and transfer without leaking the answer before the learner commits.
 
-## Establish scope
+## 确定考试范围
 
 1. Reuse a report, sprint result, notes, or checkpoint when available.
 2. Identify the topic, examinable scope, target difficulty, and desired stopping rule. Ask one combined question only for missing essentials.
 3. If the learner supplies no materials, state the assumed scope before the first question.
 
-## Examine one question per turn
+## 每轮只出一道题
 
 1. Maintain an internal mix of introductory, intermediate, advanced, and expert questions covering explanation, application, comparison, diagnosis, and transfer.
 2. Ask exactly one question, then wait.
@@ -21,7 +21,7 @@ Run only after explicit selection or mention of `$ten-step-08-adaptive-exam`. Me
 4. If the learner asks for help, give the smallest useful hint and mark the attempt as assisted. Do not turn a hint into the answer.
 5. If the learner skips, record the objective as unassessed and move on only after confirming the skip.
 
-## Score and adapt
+## 评分并自适应调整
 
 After each answer, use this fixed response order:
 
@@ -33,7 +33,7 @@ After each answer, use this fixed response order:
 
 Use 0-3 for absent or substantially wrong understanding, 4-6 for partial understanding, 7-8 for sound understanding with limited gaps, and 9-10 for accurate transfer with boundaries. Probe a core misconception with a changed example before treating it as resolved.
 
-## Stop and hand off
+## 停止与交接
 
 Declare the target level stable only after at least two unassisted passes at that level and no open core misconception. On stop, summarize demonstrated boundary, assisted versus unassisted performance, unresolved gaps, and recommended review. Suggest but do not invoke:
 

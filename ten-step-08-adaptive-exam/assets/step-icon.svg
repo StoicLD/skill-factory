@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="自适应逐题考试">
+  <rect width="128" height="128" rx="28" fill="#111247"/>
+  <path d="M32 24h64a10 10 0 0 1 10 10v60a10 10 0 0 1-10 10H32a10 10 0 0 1-10-10V34a10 10 0 0 1 10-10Z" fill="#FDF8E7"/>
+  <path d="M50 48c1-13 27-14 29 0 1 8-5 11-11 15-4 3-4 7-4 10" fill="none" stroke="#7567F8" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="64" cy="87" r="5" fill="#7567F8"/>
+  <path d="m83 79 8 8 16-20" fill="none" stroke="#2FC3F4" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="m97 15 3 7 7 3-7 3-3 7-3-7-7-3 7-3 3-7Z" fill="#FFD15C"/>
+</svg>

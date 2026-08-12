@@ -1,23 +1,23 @@
 ---
 name: ten-step-09-feynman-loop
-description: "Run step 9 of the ten-step learning method as an interactive Feynman explain-diagnose-reteach loop. Use only when the user explicitly selects or names ten-step-09-feynman-loop; never activate implicitly from an ordinary explanation request."
+description: "执行十步学习方法的第 09 步：先让学习者用自己的话解释，再精确分类理解缺口，并通过最小提示、重讲和检验完成费曼纠错循环。仅当用户通过 /skills 选择或显式调用 ten-step-09-feynman-loop 时使用；绝不从普通解释请求中隐式启动。"
 ---
 
-# Step 09: Feynman loop
+# 十步学习方法：09 费曼解释纠错
 
 Run only after explicit selection or mention of `$ten-step-09-feynman-loop`. Make the learner explain first, then repair only the gaps their explanation reveals.
 
-## Establish the concept
+## 确定待检验概念
 
 1. Reuse an exam result, report, notes, or checkpoint when available.
 2. Identify one concept, the intended audience, and the target use. Ask one combined question only for missing essentials.
 3. If the learner already supplied an explanation, treat it as the first attempt and diagnose it immediately.
 
-## Require an explanation before teaching
+## 先让学习者解释，再开始教学
 
 Ask the learner to explain the concept in their own words, include one concrete example, and state when the idea may not apply. Then wait. Do not provide a standard explanation, final definition, or vocabulary list before the attempt.
 
-## Diagnose precisely
+## 精确诊断理解缺口
 
 Classify each material gap as one of:
 
@@ -29,7 +29,7 @@ Classify each material gap as one of:
 
 Name only the highest-value gaps per turn. Cite the learner's wording so the diagnosis is inspectable.
 
-## Repair with escalating hints
+## 用递进提示修复缺口
 
 Repeat this loop:
 
@@ -41,7 +41,7 @@ Repeat this loop:
 
 Do not replace the learner's explanation with a polished lecture. When factual accuracy depends on current or specialized evidence, use available sources or clearly mark uncertainty.
 
-## Pass and finish
+## 通过与结束
 
 Pass only when the explanation is simple, accurate, complete enough for the target, supported by a valid example, and bounded by at least one condition or limitation. Finish with:
 

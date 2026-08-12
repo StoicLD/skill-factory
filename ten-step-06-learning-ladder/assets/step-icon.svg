@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="五级学习阶梯">
+  <rect width="128" height="128" rx="28" fill="#111247"/>
+  <path d="M20 96h18V80h18V64h18V48h18V32h16v72H20V96Z" fill="#7567F8"/>
+  <path d="M20 96h18V80h18V64h18V48h18V32h16" fill="none" stroke="#FDF8E7" stroke-width="7" stroke-linejoin="round"/>
+  <circle cx="29" cy="88" r="7" fill="#2FC3F4"/>
+  <path d="m98 18 3 7 7 3-7 3-3 7-3-7-7-3 7-3 3-7Z" fill="#FFD15C"/>
+</svg>
