@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate canonical portable Agent Skills in this repository."""
+"""Validate canonical portable Agent Skills in a source catalog root."""
 
 from __future__ import annotations
 
@@ -84,7 +84,7 @@ def validate_skill(path: Path, root: Path) -> list[Finding]:
     findings: list[Finding] = []
     skill_dir = path.parent
     if skill_dir.parent != root:
-        findings.append(Finding(path, "skills must be direct child directories of the repository root"))
+        findings.append(Finding(path, "skills must be direct child directories of the source catalog root"))
 
     metadata, body_lines, parse_findings = parse_skill(path)
     findings.extend(parse_findings)
@@ -131,7 +131,7 @@ def validate_repository(root: Path) -> tuple[list[Path], list[Finding]]:
     root = root.resolve()
     findings: list[Finding] = []
     if not root.is_dir():
-        return [], [Finding(root, "repository root does not exist or is not a directory")]
+        return [], [Finding(root, "source catalog root does not exist or is not a directory")]
 
     skill_files = sorted(path for path in root.rglob("SKILL.md") if ".git" not in path.parts)
     for child in sorted(root.iterdir()):
@@ -165,4 +165,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

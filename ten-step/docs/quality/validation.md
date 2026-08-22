@@ -1,6 +1,6 @@
 # Validation and release gates
 
-Run from the product repository root:
+Run from the Ten-step-learning source root (`project/ten-step/`):
 
 ```powershell
 python scripts/validate_skills.py .
@@ -32,4 +32,3 @@ Before release, also verify:
 - platform extensions do not alter portable-core behavior.
 
 Structural validation is necessary but not sufficient for a release claim.
-

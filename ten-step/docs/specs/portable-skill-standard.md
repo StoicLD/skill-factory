@@ -52,7 +52,7 @@ Keep essential procedure in `SKILL.md`; move detailed schemas, variants, and lon
 
 1. Define concrete user prompts that should and should not trigger the skill.
 2. Identify reusable scripts, references, and assets; omit directories without a real use.
-3. Create `<repo>/<skill-name>/SKILL.md` with the portable frontmatter.
+3. Create `<source-root>/<skill-name>/SKILL.md` with the portable frontmatter.
 4. Write instructions for another capable agent, using imperative language and explicit inputs, outputs, failure states, and validation.
 5. Add host adapters only when they improve that host without changing portable behavior.
 6. Run structural validation, script tests, realistic trigger checks, and at least one forward task before release.
@@ -64,4 +64,3 @@ Keep essential procedure in `SKILL.md`; move detailed schemas, variants, and lon
 - [OpenAI: Build skills](https://learn.chatgpt.com/docs/build-skills)
 - [Cursor: Agent Skills](https://cursor.com/docs/skills.md)
 - [WorkBuddy/CodeBuddy: Skills](https://www.workbuddy.ai/docs/ide/Features/Skills)
-

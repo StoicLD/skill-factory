@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Create a portable Agent Skill as a direct child of the repository root."""
+"""Create a portable Agent Skill as a direct child of a source catalog root."""
 
 from __future__ import annotations
 
@@ -77,7 +77,7 @@ def parse_args() -> argparse.Namespace:
         "--root",
         type=Path,
         default=Path.cwd(),
-        help="product repository root; defaults to the current directory",
+        help="source catalog root; defaults to the current directory",
     )
     return parser.parse_args()
 
@@ -96,4 +96,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

@@ -11,7 +11,7 @@ Claude, Codex, Cursor, and WorkBuddy/CodeBuddy share the folder-based Agent Skil
 
 Canonical skills use only the common contract: a self-contained directory, `SKILL.md`, `name`, `description`, and optional `scripts/`, `references/`, and `assets/`. Platform-only behavior stays in a separate file that other hosts ignore safely or in a separately generated host variant.
 
-Skills live directly under the product repository root. This gives every skill an independent folder while avoiding reliance on recursive category discovery.
+Skills live directly under the source catalog root. This gives every skill an independent folder while avoiding reliance on recursive category discovery, even when the catalog itself is stored below a parent Git repository root.
 
 ## Consequences
 
@@ -19,4 +19,3 @@ Skills live directly under the product repository root. This gives every skill a
 - Some host conveniences require an adapter or variant rather than a single enriched frontmatter block.
 - The repository validator is intentionally stricter than the full open specification: it rejects extra frontmatter in the canonical artifact.
 - Compatibility claims require periodic re-verification against primary host documentation.
-

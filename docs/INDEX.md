@@ -1,15 +1,9 @@
-# Documentation index
+# Skill Factory source map
 
-Use this file as the reading map. Load only the document needed for the task.
+Use this file only to select the source unit that owns a task. Load its own documentation map for authoritative facts.
 
-| Need | Authoritative document |
-|---|---|
-| Repository boundaries and placement | `architecture/repository-layout.md` |
-| Portable Skill contract | `specs/portable-skill-standard.md` |
-| Host compatibility and installation targets | `specs/platform-compatibility.md` |
-| Why the portable core is deliberately small | `decisions/0001-portable-core.md` |
-| Validation and release gates | `quality/validation.md` |
-| Ten-step Skill suite validation evidence | `quality/ten-step-suite-validation.md` |
-| Current bootstrap state and next work | `plans/active/bootstrap.md` |
+| Source unit | Entry | Documentation | Current state |
+|---|---|---|---|
+| Ten-step-learning | [`../ten-step/AGENTS.md`](../ten-step/AGENTS.md) | [`../ten-step/docs/INDEX.md`](../ten-step/docs/INDEX.md) | [`../ten-step/docs/plans/active/bootstrap.md`](../ten-step/docs/plans/active/bootstrap.md) |
 
-Each accepted skill is a direct child directory of the repository root. The documentation, factory templates, scripts, and tests are reserved infrastructure directories and are not skills.
+The parent repository may contain multiple source units. Each unit owns its specifications, implementation, tests, build source, plans, and accepted validation evidence.

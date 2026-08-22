@@ -1,42 +1,21 @@
-# Skill Factory product entry
+# Skill Factory repository map
 
-This repository is the authoritative source for portable Agent Skills. Product facts in this repository override remembered conversation state and the sibling Agent Context repository.
+This Git repository contains independently maintained Skill source units. Keep this file as a map; product facts, implementation, tests, plans, and validation evidence belong in the selected source unit.
 
 ## Start or resume work
 
-1. Read `docs/INDEX.md` and select only the documents relevant to the request.
-2. Read `docs/plans/active/` to establish current state, next work, and completion criteria.
-3. Inspect the target Skill directory and current Git status before editing.
-4. If resuming from a handoff, verify its referenced product revision and paths. Treat stale handoffs as hints, not authority.
-5. Update the authoritative specification, plan, decision, implementation, or validation evidence when product state changes.
+1. Read the [repository source map](docs/INDEX.md).
+2. Identify the source unit that owns the task.
+3. Read that unit's native entry and documentation index before editing.
+4. Check Git status from this repository root, then run validation from the source unit named by its entry.
 
-## Repository boundaries
+## Current source units
 
-- Read `docs/INDEX.md` before changing standards or layout.
-- Store each real skill directly at `<repo>/<skill-name>/SKILL.md`; the folder name must equal the frontmatter `name`.
-- Reserved infrastructure directories are `docs/`, `factory/`, `scripts/`, and `tests/`; they are not skills.
-- Keep portable `SKILL.md` frontmatter to `name` and `description`. Put host-specific configuration in optional adapter files such as `agents/openai.yaml`.
-- Keep `SKILL.md` concise and imperative. Put optional executable helpers in `scripts/`, on-demand documentation in `references/`, and output resources in `assets/`.
-- Do not add `README.md`, changelogs, installation guides, quick references, or empty placeholder directories inside a skill.
-- Product facts, accepted specifications, plans, decisions, and validation evidence belong in this repository, not in the sibling Agent Context repository.
+- Ten-step-learning: read [ten-step/AGENTS.md](ten-step/AGENTS.md), then [ten-step/docs/INDEX.md](ten-step/docs/INDEX.md).
 
-## Validation and completion
+## Boundaries
 
-Run from this repository root:
-
-```powershell
-python -B scripts/validate_skills.py .
-python -B -m unittest discover -s tests
-```
-
-A Skill is not ready merely because its files parse. Apply the manual gates in `docs/quality/validation.md`, including trigger examples, safe failure behavior, script checks, and forward testing for every claimed host.
-
-## Navigation
-
-- Repository layout: `docs/architecture/repository-layout.md`
-- Portable contract: `docs/specs/portable-skill-standard.md`
-- Host compatibility: `docs/specs/platform-compatibility.md`
-- Quality gates: `docs/quality/validation.md`
-- Current plan: `docs/plans/active/bootstrap.md`
-- New Skill scaffold: `scripts/new_skill.py`
-- Canonical validator: `scripts/validate_skills.py`
+- `project/` is the only Git root for the source units stored here; do not create nested repositories.
+- Generated Codex Plugin and Marketplace output lives outside this repository under `../codex-plugin/` and is not source.
+- Do not store product facts in this root map. Add a source unit to `docs/INDEX.md`, then keep its facts under that unit.
+- Do not move files between source units or change Git history, remotes, worktrees, or generated-output boundaries without explicit owner approval.

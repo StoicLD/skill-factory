@@ -47,7 +47,7 @@ The OpenAI adapters set `allow_implicit_invocation: false` for all four interact
 
 ## Automated evidence
 
-Run from the product repository root:
+Run from the Ten-step-learning source root (`project/ten-step/`):
 
 ```powershell
 python -B scripts/validate_skills.py .
@@ -57,7 +57,7 @@ python -B -m py_compile ten-step-learning-report/scripts/validate_report.py
 
 Current result: five Skill directories pass structural validation and the built-in Skill quick validator; eighteen unit tests pass. Tests cover ordered Chinese display metadata, explicit invocation policy, default prompts, distinct icon paths, Plugin brand metadata, PNG dimensions, clean-build safeguards, checkpoint fields, answer protection, learner-first Feynman behavior, template placeholders, and report validation success/failure paths.
 
-The authoritative clean-build command generated Plugin version `1.1.0` under `../codex-plugin/ten-step-learning-suite/`. A sentinel placed in the prior build was removed, proving clean replacement. The resulting local Marketplace contained 28 files, all five Skill directories, three Plugin PNG assets, and five Skill SVG icons. Source-to-package SHA-256 comparisons, packaged Skill validation, and the built-in Codex Plugin validator passed.
+The authoritative clean-build command generated Plugin version `1.1.0` under `../../codex-plugin/ten-step-learning-suite/`. A sentinel placed in the prior build was removed, proving clean replacement. The resulting local Marketplace contained 28 files, all five Skill directories, three Plugin PNG assets, and five Skill SVG icons. Source-to-package SHA-256 comparisons, packaged Skill validation, and the built-in Codex Plugin validator passed before the source-tree migration; rerun the clean build before claiming post-migration packaging evidence.
 
 ## Forward evidence
 
