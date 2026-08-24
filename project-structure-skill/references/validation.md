@@ -98,6 +98,13 @@ python "<SKILL_DIRECTORY>/scripts/project_probe.py" validate \
 - 对从双仓库迁移的项目，另外搜索代码、测试、CI 和正式文档是否仍引用旧 Workspace、Context 仓库或 ignored 路径。
 - 再次运行同一目标，预期无 diff；这才是幂等证据。
 
+## 审计验证
+
+- 审计契约只声明用户确认或项目现有规范已经要求的结构；未选择的可选入口、文档模块、ignored 目录、worktree 或 CI 约束不得视为缺陷。
+- 审计前后比较 Git 状态，确认目标仓库没有因审计产生变化；临时契约必须位于目标仓库外。
+- 自动检查通过只证明契约中可机械判定的结构。人工复核结果分别标记为 `conformant`、`non-conformant` 或 `unverified`，并附具体路径和证据。
+- 审计发现不得自动转为写入。修复需要用户显式调用 `evolve`，并遵循写入预览和授权边界。
+
 ## 人工复核
 
 检查：

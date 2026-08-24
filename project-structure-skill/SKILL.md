@@ -1,9 +1,21 @@
 ---
 name: project-structure-skill
-description: Initialize or evolve a single-repository, agent-legible project where a few thin native entry files such as AGENTS.md and CLAUDE.md map to authoritative facts in docs/. Use when structuring a repository for one or more coding agents, consolidating a multi-repository agent workspace, or moving project facts out of oversized agent instruction files.
+description: Explicitly initialize, structurally evolve, or audit a single-repository, agent-legible project where a few thin native entry files such as AGENTS.md and CLAUDE.md map to authoritative facts in docs/. Do not use for routine project work or ordinary updates to existing status, plans, README content, or document indexes.
 ---
 
 # 构建单仓库 Agent 项目结构
+
+## 调用边界
+
+仅在用户显式调用本 Skill，并要求以下操作之一时使用：
+
+- `initialize`：初始化符合本 Skill 目标结构的新项目。
+- `evolve`：主动调整现有项目的结构，使其趋近本 Skill 的目标结构。
+- `audit`：只读审计现有项目是否符合本 Skill 的结构规范。
+
+项目初始化或演进完成后，项目内的原生入口、文档索引、权威事实和机械约束独立承担日常治理；Agent 不需要在项目推进过程中持续加载本 Skill。
+
+不得因普通任务会修改新会话可读取的文件而使用本 Skill。更新现有项目的状态、计划、里程碑、检查表、README、文档正文或索引内容，本身不构成结构演进；只有仓库边界、原生入口、文档路由、事实归属或机械约束的结构契约需要改变时，才使用 `evolve`。
 
 ## 目标
 
@@ -35,7 +47,7 @@ description: Initialize or evolve a single-repository, agent-legible project whe
 
 ## 选择操作和深度
 
-选择 `initialize` 创建新仓库，或选择 `evolve` 最小修改现有仓库。能够从路径和 Git 状态可靠判断时不要重复询问。
+选择 `initialize` 创建新仓库，选择 `evolve` 最小修改现有仓库，或选择 `audit` 只读检查现有仓库。能够从显式请求、路径和 Git 状态可靠判断时不要重复询问；无法区分操作时先确认，不要把普通项目维护推断为结构演进。
 
 采用满足目标的最低深度：
 
@@ -49,7 +61,7 @@ description: Initialize or evolve a single-repository, agent-legible project whe
 
 复用已提供信息，只补齐会改变产物的缺失项：
 
-- 仓库绝对路径、`initialize` 或 `evolve`，以及初始化时的 branch。
+- 仓库绝对路径、`initialize`、`evolve` 或 `audit`，以及初始化时的 branch。
 - 每种目标工具在仓库根实际会读取的原生入口文件。只使用用户提供、现有项目证明或当前工具文档确认的名称；未知时标记为手动入口或要求确认。
 - 文档根和索引名称，以及现有项目约定优先级。
 - 需要成为权威事实的真实模块和当前已有内容。
@@ -70,7 +82,7 @@ description: Initialize or evolve a single-repository, agent-legible project whe
 
 ## 生成写入预览
 
-任何写入前列出：
+`initialize` 或 `evolve` 的任何写入前列出：
 
 - 操作、深度、解析后的仓库根、branch/commit/remote 选择。
 - 每个工具的已确认入口能力，以及入口到文档索引再到事实文档的读取链。
@@ -101,9 +113,20 @@ description: Initialize or evolve a single-repository, agent-legible project whe
 - 从双仓库结构迁移时，先把经确认的产品事实晋升到产品仓库，把必要私有状态降级到 ignored 本地目录；保留旧仓库，直至用户批准归档或删除。
 - 重复执行相同目标应成为验证或无操作，不得追加重复段落或重写已满足内容。
 
+## 审计
+
+`audit` 默认且始终只读。显式调用审计不授权修复、移动、创建或删除文件，也不授权改变 Git、依赖、CI 或远程状态。
+
+1. 确认审计目标、适用深度和项目已声明的工具原生入口；没有选择的可选模块不得记为违规。
+2. 执行“检查现状”中的只读检查，并读取[文件与事实契约](references/file-contracts.md)和[验证契约](references/validation.md)。
+3. 根据项目现有约定和用户确认的目标生成一次性审计契约；契约放在仓库外，不得成为新的项目 manifest。
+4. 运行自动检查，并人工复核入口是否为薄地图、事实是否单一权威、私有内容是否脱离权威链、机械约束是否真实可执行。
+5. 将结果分为 `conformant`、`non-conformant` 和 `unverified`，逐项给出路径、证据、适用规则和最小修复方向；不要把偏好或未选择的结构槽位写成违规。
+6. 审计完成后停止。如果用户要修复，要求其显式调用本 Skill 的 `evolve` 操作，再生成写入预览。
+
 ## 验证
 
-读取[验证契约](references/validation.md)，从写入预览生成工作区外的一次性 JSON 契约并执行：
+读取[验证契约](references/validation.md)。`initialize` 和 `evolve` 从写入预览生成工作区外的一次性 JSON 契约；`audit` 从已确认的审计目标生成同类一次性契约。执行：
 
 ```bash
 python "<SKILL_DIRECTORY>/scripts/project_probe.py" validate \
@@ -119,4 +142,4 @@ python "<SKILL_DIRECTORY>/scripts/project_probe.py" validate \
 
 ## 最终交付
 
-报告最终深度、仓库根、实际入口链、权威文档、ignored 路径、机械约束、Git 状态、自动与人工验证结果，以及未执行操作。完成结构任务后停止，不自动开始产品设计或业务实现。
+`initialize` 或 `evolve` 报告最终深度、仓库根、实际入口链、权威文档、ignored 路径、机械约束、Git 状态、自动与人工验证结果，以及未执行操作。`audit` 报告审计目标、合规项、不合规项、未验证项、证据和最小修复方向。完成结构任务后停止，不自动开始产品设计、业务实现或审计修复。
