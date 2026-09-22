@@ -52,7 +52,7 @@ description: Explicitly initialize, structurally evolve, or audit a single-repos
 采用满足目标的最低深度：
 
 - `skeleton-only`：只建立或确认一个 Git 仓库，不创建入口或文档。
-- `mapped`：增加已确认的原生入口、文档索引和有真实内容的最少事实文档。
+- `mapped`：增加已确认的原生入口和文档索引；有真实事实内容时再增加所需文档。
 - `structured`：在 `mapped` 上增加用户确实需要的决策、计划、质量、运行手册、协作或机械约束模块。
 
 读取[Profiles 与结构槽位](references/profiles.md)。当缺失选择会改变实际写入时，一次性说明推荐项和取舍后再确认；不要为结构对称创建空目录或占位文档。
@@ -91,14 +91,14 @@ description: Explicitly initialize, structurally evolve, or audit a single-repos
 - `.gitignore` 变化、私有/临时目录语义、worktree 和机械约束选择。
 - 一次性验证契约摘要，以及明确不会执行的 commit、remote、依赖、CI 或业务实现。
 
-用户已经明确要求的纯新增写入可在预览后继续。任何破坏性演进、Git 边界/历史变化、现有事实合并或权限扩大都要逐项等待批准。
+预览用于审查影响，不是自动新增的审批关卡。现有授权覆盖的新增、编辑和常规整理可在预览后继续；具体授权边界见[迁移授权规则](references/migration.md#授权与风险)，不要重复索取已获得的批准。
 
 ## 初始化
 
 1. 确认目标不在另一个 Git 工作树内，且不会形成 nested Git；Git worktree 根本身可以使用 `.git` 文件。
 2. 用用户选择的 branch 初始化唯一仓库；`skeleton-only` 随即停止。
 3. 为每种已确认的原生入口创建一个短地图；多个 Agent 共用同一原生入口时合并为一个文件，不按 Agent 数量复制。
-4. 创建一个文档索引，并只创建能够写入真实内容的事实文档。入口目标保持在 100 行以内；超出时继续把事实下沉到文档。
+4. 创建一个文档索引，并只创建能够写入真实内容的事实文档。入口和索引保持 MAP 职责；篇幅建议见[根部原生入口契约](references/file-contracts.md#根部原生入口)，不以行数决定是否拆分。
 5. 若选择本地私有或临时目录，先以最小方式合并 `.gitignore`，再按需创建实际文件；不要创建空目录占位。
 6. `structured` 只增加已选择的模块。根据项目语言和 CI 环境实现 linter/test；错误信息同时指出违规路径、规则和修复动作。
 7. 不创建第二仓库、外层 Workspace 路由、机器绝对路径、应用脚手架、commit、remote 或依赖，除非用户分别要求。
@@ -107,7 +107,7 @@ description: Explicitly initialize, structurally evolve, or audit a single-repos
 
 必须读取[演进与单仓库迁移](references/migration.md)，计算现状到目标的逐路径差异并应用最小变化。
 
-- 默认只执行 `keep`、`create` 和 `edit-in-place`。
+- 优先使用 `keep`、`create` 和 `edit-in-place`；已授权目标需要移动、重命名、合并或归档时，按迁移授权规则执行最小变化。
 - 同名入口先读后合并项目专属规则；不要用模板覆盖。
 - 先建立权威文档，再把入口缩减为链接地图；未验证新读取链前不要移除旧事实。
 - 从双仓库结构迁移时，先把经确认的产品事实晋升到产品仓库，把必要私有状态降级到 ignored 本地目录；保留旧仓库，直至用户批准归档或删除。
@@ -122,7 +122,7 @@ description: Explicitly initialize, structurally evolve, or audit a single-repos
 3. 根据项目现有约定和用户确认的目标生成一次性审计契约；契约放在仓库外，不得成为新的项目 manifest。
 4. 运行自动检查，并人工复核入口是否为薄地图、事实是否单一权威、私有内容是否脱离权威链、机械约束是否真实可执行。
 5. 将结果分为 `conformant`、`non-conformant` 和 `unverified`，逐项给出路径、证据、适用规则和最小修复方向；不要把偏好或未选择的结构槽位写成违规。
-6. 审计完成后停止。如果用户要修复，要求其显式调用本 Skill 的 `evolve` 操作，再生成写入预览。
+6. 审计完成后停止。用户随后明确要求修复时，按 `evolve` 生成写入预览并执行已授权变更，不要求用户重复输入操作名。
 
 ## 验证
 
@@ -134,7 +134,7 @@ python "<SKILL_DIRECTORY>/scripts/project_probe.py" validate \
   --contract "<TEMPORARY_CONTRACT_JSON>"
 ```
 
-按预览选择 branch、commit 和 remote 检查。验证器应确认单一 Git 根、无意外 nested Git、必需文件、入口行数、真实相对链接、共同文档索引、事实文档可达及 ignore 规则。
+按预览选择 branch、commit 和 remote 检查。验证器应确认单一 Git 根、无意外 nested Git、必需文件、真实相对链接、共同文档索引和事实文档可达、声明的读取链无循环及 ignore 规则。允许兼容入口和子索引形成间接导航；入口和索引的篇幅不设机械门槛。
 
 人工复核验证器无法证明的语义：入口是否只做地图；事实是否唯一且具体；私有内容是否未进入权威链；构建是否不依赖 ignored 路径；并发写入是否使用独立 worktree；CI remediation 是否可执行。
 

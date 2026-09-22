@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import html
 import json
 import os
 import re
@@ -26,9 +27,134 @@ CONTRACT_KEYS = {
     "ignored_directories",
     "forbid_nested_git",
 }
-ENTRY_KEYS = {"path", "max_lines", "ordered_links"}
-LINK_PATTERN = re.compile(r"(?<!!)\[[^\]]*\]\(([^)]+)\)")
+ENTRY_KEYS = {"path", "ordered_links"}
+OPTIONAL_CONTRACT_KEYS = {"navigation_maps"}
+# Accepted only for compatibility with previously generated temporary contracts.
+LEGACY_ENTRY_KEYS = {"max_lines"}
 WINDOWS_ABSOLUTE_PATTERN = re.compile(r"^[A-Za-z]:[/\\]")
+
+
+def markdown_destinations(text: str) -> list[str]:
+    """Read inline/reference links, excluding code, comments and images.
+
+    This lightweight reader covers the Markdown navigation forms documented in
+    validation.md; it is not a full Markdown renderer.
+    """
+    lines: list[str] = []
+    fence = ""
+    for line in text.splitlines(keepends=True):
+        marker = re.match(r"^ {0,3}(`{3,}|~{3,})(.*)$", line)
+        if fence:
+            if marker and marker[1][0] == fence[0] and len(marker[1]) >= len(fence) and not marker[2].strip():
+                fence = ""
+            lines.append("\n")
+        elif marker:
+            fence = marker[1]
+            lines.append("\n")
+        elif line.startswith(("    ", "\t")):
+            lines.append("\n")
+        else:
+            lines.append(line)
+    text = re.sub(r"<!--.*?-->", "", "".join(lines), flags=re.S)
+
+    def destination(start: int) -> tuple[str | None, int]:
+        while start < len(text) and text[start].isspace():
+            start += 1
+        angled = start < len(text) and text[start] == "<"
+        if angled:
+            start += 1
+        result: list[str] = []
+        depth = 0
+        pos = start
+        while pos < len(text):
+            char = text[pos]
+            if char == "\\" and pos + 1 < len(text) and text[pos + 1] in r"\`*_{}[]()#+-.!<>":
+                result.append(text[pos + 1])
+                pos += 2
+                continue
+            if angled:
+                if char == ">":
+                    return html.unescape("".join(result)), pos + 1
+                if char in "\r\n<":
+                    return None, pos
+            else:
+                if char.isspace() or (char == ")" and depth == 0):
+                    break
+                if char == "(":
+                    depth += 1
+                elif char == ")":
+                    depth -= 1
+            result.append(char)
+            pos += 1
+        if angled or depth:
+            return None, pos
+        return html.unescape("".join(result)), pos
+
+    def label_key(value: str) -> str:
+        return " ".join(value.split()).casefold()
+
+    references: dict[str, str] = {}
+    definition_spans: dict[int, int] = {}
+    for match in re.finditer(r"(?m)^ {0,3}\[([^\]\n]+)\]:[ \t]*", text):
+        target, end = destination(match.end())
+        if target is not None:
+            references.setdefault(label_key(match[1]), target)
+            line_end = text.find("\n", end)
+            definition_spans[match.start()] = len(text) if line_end < 0 else line_end + 1
+
+    targets: list[str] = []
+    pos = 0
+    while pos < len(text):
+        if pos in definition_spans:
+            pos = definition_spans[pos]
+            continue
+        if text[pos] == "\\":
+            pos += 2
+            continue
+        if text[pos] == "`":
+            run = re.match(r"`+", text[pos:])[0]
+            closing = re.search(r"(?<!`)" + re.escape(run) + r"(?!`)", text[pos + len(run):])
+            pos = pos + len(run) + closing.end() if closing else pos + len(run)
+            continue
+        image = text.startswith("![", pos)
+        opening = pos + 1 if image else pos
+        if text[opening] != "[":
+            pos += 1
+            continue
+        end = opening + 1
+        depth = 1
+        while end < len(text) and depth:
+            if text[end] == "\\":
+                end += 2
+                continue
+            if text[end] == "[":
+                depth += 1
+            elif text[end] == "]":
+                depth -= 1
+            end += 1
+        if depth:
+            pos += 1
+            continue
+        label = text[opening + 1:end - 1]
+        target = None
+        if text[end:end + 1] == "(":
+            target, tail = destination(end + 1)
+            closing = re.match(r'''\s*(?:"[^"\n]*"|'[^'\n]*'|\([^\n]*?\))?\s*\)''', text[tail:])
+            if closing:
+                end = tail + closing.end()
+            else:
+                target = None
+        elif text[end:end + 1] == "[":
+            closing = text.find("]", end + 1)
+            if closing >= 0:
+                target = references.get(label_key(text[end + 1:closing] or label))
+                end = closing + 1
+        else:
+            target = references.get(label_key(label))
+        if target is not None and not image:
+            targets.append(target)
+        pos = end
+    return targets
 
 
 @dataclass(frozen=True)
@@ -135,13 +261,15 @@ def markdown_targets(source_path: Path, repository_root: Path) -> tuple[list[str
 
     targets: list[str] = []
     errors: list[str] = []
-    for match in LINK_PATTERN.finditer(text):
-        raw = match.group(1).strip()
-        if raw.startswith("<") and raw.endswith(">"):
-            raw = raw[1:-1].strip()
-        if " " in raw and not raw.startswith(("http://", "https://")):
-            raw = raw.split(maxsplit=1)[0]
-        parsed = urlsplit(raw)
+    for raw in markdown_destinations(text):
+        if WINDOWS_ABSOLUTE_PATTERN.match(raw) or raw.startswith("\\"):
+            errors.append(f"absolute local link is not portable: {raw!r}")
+            continue
+        try:
+            parsed = urlsplit(raw)
+        except ValueError as error:
+            errors.append(f"invalid link {raw!r}: {error}")
+            continue
         if parsed.scheme or parsed.netloc or not parsed.path:
             continue
         decoded = unquote(parsed.path).replace("\\", "/")
@@ -243,26 +371,25 @@ def parse_map(
     required_set: set[str],
 ) -> tuple[dict[str, Any] | None, list[str]]:
     errors: list[str] = []
-    if not isinstance(raw, dict) or set(raw) != ENTRY_KEYS:
-        return None, [f"{label} must contain exactly {sorted(ENTRY_KEYS)}"]
+    if (
+        not isinstance(raw, dict)
+        or not ENTRY_KEYS.issubset(raw)
+        or set(raw) - ENTRY_KEYS - LEGACY_ENTRY_KEYS
+    ):
+        return None, [f"{label} must contain {sorted(ENTRY_KEYS)}; only legacy max_lines is additionally accepted"]
     path = normalize_relative_path(raw.get("path"))
     if path is None:
         errors.append(f"{label}.path is unsafe")
     elif path.casefold() not in required_set:
         errors.append(f"{label}.path is not in required_files")
-    max_lines = raw.get("max_lines")
-    if not isinstance(max_lines, int) or isinstance(max_lines, bool) or max_lines < 1:
-        errors.append(f"{label}.max_lines must be a positive integer")
     links, link_errors = unique_paths(raw.get("ordered_links"), f"{label}.ordered_links")
     errors.extend(link_errors)
-    if not links:
-        errors.append(f"{label}.ordered_links must not be empty")
     for link in links:
         if link.casefold() not in required_set:
             errors.append(f"{label}.ordered_links path is not in required_files: {link}")
     if errors:
         return None, errors
-    return {"path": path, "max_lines": max_lines, "ordered_links": links}, []
+    return {"path": path, "ordered_links": links}, []
 
 
 def validate_map(
@@ -276,16 +403,6 @@ def validate_map(
         add(f"{check_prefix}_exists", False, spec["path"])
         return
     add(f"{check_prefix}_exists", True, spec["path"])
-    try:
-        line_count = len(source.read_text(encoding="utf-8").splitlines())
-    except (OSError, UnicodeError) as error:
-        add(f"{check_prefix}_readable", False, str(error))
-        return
-    add(
-        f"{check_prefix}_within_line_limit",
-        line_count <= spec["max_lines"],
-        f"lines={line_count}; max={spec['max_lines']}",
-    )
     actual, link_errors = markdown_targets(source, root)
     add(f"{check_prefix}_links_are_portable", not link_errors, json.dumps(link_errors))
     add(
@@ -300,7 +417,7 @@ def validate_contract(
     root: Path,
     add: Callable[[str, bool, str], None],
 ) -> None:
-    unknown = sorted(set(contract) - CONTRACT_KEYS)
+    unknown = sorted(set(contract) - CONTRACT_KEYS - OPTIONAL_CONTRACT_KEYS)
     missing = sorted(CONTRACT_KEYS - set(contract))
     add("contract_keys_are_exact", not unknown and not missing, json.dumps({"unknown": unknown, "missing": missing}))
     add("contract_version_is_supported", contract.get("version") == 1, repr(contract.get("version")))
@@ -329,8 +446,6 @@ def validate_contract(
     add("required_files_exist", not missing_files, json.dumps(missing_files))
 
     authority_errors: list[str] = []
-    if not authoritative:
-        authority_errors.append("authoritative_docs must not be empty")
     for relative in authoritative:
         if relative.casefold() not in required_set:
             authority_errors.append(f"not required: {relative}")
@@ -371,22 +486,72 @@ def validate_contract(
             docs_path = PurePosixPath(docs_root)
             if target_path == docs_path or docs_path not in target_path.parents:
                 common_map_errors.append("map_target is outside docs_root")
-        for entry in entry_specs:
-            if map_target.casefold() not in {link.casefold() for link in entry["ordered_links"]}:
-                common_map_errors.append(f"entrypoint does not directly link map_target: {entry['path']}")
         if index_spec is not None and index_spec["path"].casefold() != map_target.casefold():
             common_map_errors.append("index.path does not equal map_target")
-    if index_spec is not None:
-        index_links = {link.casefold() for link in index_spec["ordered_links"]}
-        for relative in authoritative:
-            if relative.casefold() not in index_links:
-                common_map_errors.append(f"index does not declare authoritative doc: {relative}")
-    add("all_entrypoints_share_one_document_map", not common_map_errors, json.dumps(common_map_errors))
+    add("common_document_map_is_valid", not common_map_errors, json.dumps(common_map_errors))
 
     for index, entry in enumerate(entry_specs):
         validate_map(entry, root, add, f"entrypoint_{index}")
     if index_spec is not None:
         validate_map(index_spec, root, add, "document_index")
+
+    navigation_specs: list[dict[str, Any]] = []
+    navigation_errors: list[str] = []
+    raw_navigation = contract.get("navigation_maps", [])
+    if not isinstance(raw_navigation, list):
+        navigation_errors.append("navigation_maps must be a list")
+    else:
+        for index, raw_map in enumerate(raw_navigation):
+            parsed, errors = parse_map(raw_map, f"navigation_maps[{index}]", required_set)
+            navigation_errors.extend(errors)
+            if parsed is not None:
+                navigation_specs.append(parsed)
+                validate_map(parsed, root, add, f"navigation_map_{index}")
+    maps = entry_specs + ([index_spec] if index_spec else []) + navigation_specs
+    map_paths = [spec["path"].casefold() for spec in maps]
+    if len(map_paths) != len(set(map_paths)):
+        navigation_errors.append("map paths duplicate or case-collide across roles")
+    if set(map_paths) & {path.casefold() for path in authoritative}:
+        navigation_errors.append("a navigation map cannot also be an authoritative fact document")
+    add("navigation_maps_are_valid", not navigation_errors, json.dumps(navigation_errors))
+    # Only declared forward reading links form the graph. Ordinary backlinks
+    # and cross-references are not mandatory loading dependencies.
+    graph = {spec["path"].casefold(): [p.casefold() for p in spec["ordered_links"]] for spec in maps}
+
+    def reachable(start: str) -> set[str]:
+        visited: set[str] = set()
+        pending = [start]
+        while pending:
+            current = pending.pop()
+            if current not in visited:
+                visited.add(current)
+                pending.extend(graph.get(current, []))
+        return visited
+
+    unreachable: list[str] = []
+    if map_target is not None:
+        for entry in entry_specs:
+            if map_target.casefold() not in reachable(entry["path"].casefold()):
+                unreachable.append(f"entrypoint cannot reach map_target: {entry['path']}")
+        index_reachable = reachable(map_target.casefold())
+        unreachable.extend(f"fact unreachable from map_target: {path}" for path in authoritative if path.casefold() not in index_reachable)
+    add("navigation_targets_are_reachable", not unreachable, json.dumps(unreachable))
+
+    indegrees = dict.fromkeys(graph, 0)
+    for targets in graph.values():
+        for target in targets:
+            if target in indegrees:
+                indegrees[target] += 1
+    pending = [path for path, degree in indegrees.items() if degree == 0]
+    while pending:
+        current = pending.pop()
+        for target in graph[current]:
+            if target in indegrees:
+                indegrees[target] -= 1
+                if indegrees[target] == 0:
+                    pending.append(target)
+    cyclic = [path for path, degree in indegrees.items() if degree > 0]
+    add("navigation_has_no_loading_cycles", not cyclic, json.dumps({"cycle_or_blocked_maps": cyclic}))
 
     ignore_failures: list[str] = []
     for relative in ignored:

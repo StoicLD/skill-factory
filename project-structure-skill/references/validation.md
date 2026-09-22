@@ -32,18 +32,15 @@
   "entrypoints": [
     {
       "path": "AGENTS.md",
-      "max_lines": 100,
       "ordered_links": ["docs/INDEX.md"]
     },
     {
       "path": "CLAUDE.md",
-      "max_lines": 100,
       "ordered_links": ["docs/INDEX.md"]
     }
   ],
   "index": {
     "path": "docs/INDEX.md",
-    "max_lines": 200,
     "ordered_links": ["docs/architecture/repository.md"]
   },
   "ignored_directories": [
@@ -59,15 +56,20 @@
 - 所有路径是仓库根内的安全相对路径，不使用绝对路径、`..`、空段或逃逸 symlink。
 - `docs_root` 是事实文档根；`map_target` 是共同文档索引且位于其中。
 - `required_files` 只列必须存在的文件，不列空目录。
-- `authoritative_docs` 只列事实文档；它们位于 `docs_root`，不同于根入口和文档索引，并全部由索引链接。
-- 每个 `entrypoints` 项必须位于 `required_files`，不超过 `max_lines`，并在 Markdown 中按顺序出现 `ordered_links`。每个入口必须直接链接 `map_target`。
-- `index` 的 `path` 等于 `map_target`，其 `ordered_links` 覆盖全部 `authoritative_docs`。
-- 链接必须是真实 Markdown 相对链接，解析后落在契约声明的仓库文件内；网页链接、锚点和图片不计入读取链。
+- `authoritative_docs` 只列事实文档；它们位于单一 `docs_root`，不同于入口和索引，并全部从共同索引可达。尚无事实内容时可以为空数组；索引说明现状，不创建占位事实文档。
+- 每个 `entrypoints` 项必须位于 `required_files`，并在 Markdown 中按顺序出现 `ordered_links`。每个入口必须直接或经兼容入口到达 `map_target`。
+- 入口和索引不做行数检查；MAP 职责由人工复核。新契约不填写 `max_lines`；兼容旧的一次性契约时，该字段仍可读取但不参与验证。
+- `index` 的 `path` 等于 `map_target`；其声明的读取链可经子索引到达全部 `authoritative_docs`。
+- 可选 `navigation_maps` 数组声明中间地图，每项使用与入口相同的 `path`、`ordered_links` 格式；入口、共同索引和中间地图的路径不能重复，也不能兼作事实文档。路径及链接目标均列入 `required_files`。
+- `ordered_links` 声明该文件的前向读取依赖，允许为空。验证器检查这些链接实际存在、目标文件存在、入口到共同索引及共同索引到事实的可达性，并拒绝声明的读取链中的循环。普通返回目录或交叉引用无需列入读取依赖，不因这些链接构成环而报错。
+- 链接必须是真实 Markdown 相对链接，解析后落在仓库内。声明的读取链支持内联链接（含 `<带空格路径>`、括号、可选标题）、完整/折叠/简写引用式链接和 URL 编码路径；网页链接、纯锚点、图片、代码示例和 HTML 注释不计入读取链。验证器是轻量解析器，不覆盖所有 Markdown 扩展或工具专属 include 语法；使用其他语法时报告该链未验证，并人工核实，不以自动结果冒充完整支持。
 - `ignored_directories` 是可选的窄目录路径。验证器通过 `git check-ignore --no-index <dir>/.project-probe` 检查规则，不要求创建空目录。
 - `forbid_nested_git` 为 `true` 时，根 marker 之外任意深度的 `.git` 目录或文件都会失败。
 - 契约拒绝未知字段、重复或大小写碰撞路径，避免拼写错误被静默忽略。
 
 示例名称不是固定要求。根据预览替换为项目真实入口、文档根、索引和 ignored 目录。
+
+间接导航示例：`CLAUDE.md → AGENTS.md → docs/INDEX.md → docs/design/INDEX.md → docs/design/model.md`。两个入口分别声明下一跳，共同索引声明子索引；`navigation_maps` 声明子索引到事实文档的链接。`required_files` 包含这五个文件，`authoritative_docs` 只包含最后一个。没有事实文档时仍需入口到共同索引可达，索引的 `ordered_links` 可以为空。
 
 ## 运行
 
@@ -103,7 +105,7 @@ python "<SKILL_DIRECTORY>/scripts/project_probe.py" validate \
 - 审计契约只声明用户确认或项目现有规范已经要求的结构；未选择的可选入口、文档模块、ignored 目录、worktree 或 CI 约束不得视为缺陷。
 - 审计前后比较 Git 状态，确认目标仓库没有因审计产生变化；临时契约必须位于目标仓库外。
 - 自动检查通过只证明契约中可机械判定的结构。人工复核结果分别标记为 `conformant`、`non-conformant` 或 `unverified`，并附具体路径和证据。
-- 审计发现不得自动转为写入。修复需要用户显式调用 `evolve`，并遵循写入预览和授权边界。
+- 审计发现不得自动转为写入。用户明确要求修复后按 `evolve` 处理，遵循写入预览和已有授权，无需重复要求操作名或已给出的批准。
 
 ## 人工复核
 
@@ -117,3 +119,13 @@ python "<SKILL_DIRECTORY>/scripts/project_probe.py" validate \
 - linter/CI 的错误信息包含具体 remediation，且在当前环境真实运行过。
 
 任一自动或人工检查失败时不宣称完成。
+
+## 维护验证器
+
+修改验证器后运行[回归测试](../scripts/test_project_probe.py)：
+
+```bash
+python -B -m unittest discover -s "<SKILL_DIRECTORY>/scripts" -p test_project_probe.py
+```
+
+测试覆盖间接导航、循环与断链、空事实集合、Markdown 链接形式、旧契约兼容、单一文档根和 CLI 成功/失败退出状态。
