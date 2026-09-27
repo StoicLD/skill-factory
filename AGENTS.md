@@ -13,6 +13,7 @@ This Git repository contains independently maintained Skill source units. Keep t
 
 - Ten-step-learning: read [ten-step/AGENTS.md](ten-step/AGENTS.md), then [ten-step/docs/INDEX.md](ten-step/docs/INDEX.md).
 - Project-structure Skill: read [project-structure-skill/SKILL.md](project-structure-skill/SKILL.md), then load its references only when the active workflow routes to them.
+- Book Study: read [book-read/SKILL.md](book-read/SKILL.md), then load only the selected mode's reference.
 
 ## Boundaries
 
