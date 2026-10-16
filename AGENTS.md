@@ -15,6 +15,7 @@ This Git repository contains independently maintained Skill source units. Keep t
 - Project-structure Skill: read [project-structure-skill/SKILL.md](project-structure-skill/SKILL.md), then load its references only when the active workflow routes to them.
 - Book Study: read [book-read/SKILL.md](book-read/SKILL.md), then load only the selected mode's reference.
 - Technical Prose: read [technical-prose/SKILL.md](technical-prose/SKILL.md); integration and validation records are linked there for configuration or maintenance only.
+- Learning Map: read [learning-map/SKILL.md](learning-map/SKILL.md); source requirements and validation evidence stay in that source unit.
 
 ## Boundaries
 

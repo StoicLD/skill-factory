@@ -8,5 +8,6 @@ Use this file only to select the source unit that owns a task. Load its own docu
 | Project-structure Skill | [`../project-structure-skill/SKILL.md`](../project-structure-skill/SKILL.md) | [`../project-structure-skill/references/file-contracts.md`](../project-structure-skill/references/file-contracts.md) | The Skill entry and its bundled references are the current authoritative source |
 | Book Study | [`../book-read/SKILL.md`](../book-read/SKILL.md) | Mode references linked from the Skill entry | Unified guide, close-reading, and synthesis Skill; validation scope in [`../book-read/validation.md`](../book-read/validation.md) |
 | Technical Prose | [`../technical-prose/SKILL.md`](../technical-prose/SKILL.md) | On-demand examples and integration guidance linked from the Skill entry | Technical discussion and engineering prose; checks and activation limits in [`../technical-prose/validation.md`](../technical-prose/validation.md) |
+| Learning Map | [`../learning-map/SKILL.md`](../learning-map/SKILL.md) | [`../learning-map/SPEC.md`](../learning-map/SPEC.md) | 源码已完成；结构检查、离线行为试用和实际限制见 [`../learning-map/validation.md`](../learning-map/validation.md) |
 
 The parent repository may contain multiple source units. Each unit owns its specifications, implementation, tests, build source, plans, and accepted validation evidence.
