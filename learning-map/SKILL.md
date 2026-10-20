@@ -1,9 +1,11 @@
 ---
 name: learning-map
-description: 为领域、学科或工程实践创建和维护学习 Wiki，以知识地图和可靠资料导航为核心；支持 map 导览、lesson 单主题讲义、course 地图与连贯讲义。适用于体系梳理、学习路线及明确的讲义创作；单个事实问答、出题和学习进度管理不启动此流程。
+description: 仅供用户手动选择或显式调用 $learning-map。创建和维护领域学习 Wiki，以知识地图和可靠资料导航为核心，支持 map 导览、lesson 单主题讲义及 course 连贯课程。
 ---
 
 # 学习知识地图
+
+仅在用户主动指定本 Skill 时启动，例如手动选择或显式调用 `$learning-map`。普通学习、资料推荐或讲义请求不自动调用本 Skill；下文的模式选择在手动触发之后进行。宿主调用策略由 [agents/openai.yaml](agents/openai.yaml) 中的 `policy.allow_implicit_invocation: false` 控制。
 
 以知识地图和原始资料导航组织 Markdown Wiki，让读者理解领域结构，并找到适合自己的课程、教材和其他材料。默认做地图；用户明确要求时，增加单主题讲义或相互衔接的课程正文。关键概念同时有准确说明和费曼式通俗解释。HTML 仅作必要时的地图与入门导览。
 

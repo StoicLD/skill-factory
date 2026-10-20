@@ -1,4 +1,7 @@
 interface:
   display_name: "学习知识地图"
-  short_description: "以知识地图与资料导航为核心，支持路线导览、单主题讲义和连贯课程 Wiki"
+  short_description: "仅手动调用；以知识地图与资料导航为核心，支持导览、单主题讲义和连贯课程 Wiki"
   default_prompt: "使用 $learning-map，结合已知基础与目标选择 map、lesson 或 course 模式；未要求讲义时，先为指定主题制作知识地图与资料导航。"
+
+policy:
+  allow_implicit_invocation: false

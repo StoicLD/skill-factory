@@ -114,3 +114,11 @@
 三组产物和两份原始转录保留在工作区 `tmp/learning-map-modes-trial/`，供用户审阅；它们是可丢弃的试用样例，不是 Skill 运行依赖或产品规格。没有修改只读 Obsidian Wiki、其他 Skill 源码或原始建议文件，没有提交或发布 Git 变更。
 
 本轮已将上述八份 Skill 文件同步到现有用户级安装目录 C:/Users/Dong Li/.agents/skills/learning-map，并逐文件核对 SHA-256 与源码一致。同步前确认原有安装文件与上一版源码文字一致，复制前另核对文件未被并发修改。未验证既有会话缓存刷新或后续所有调用的行为；临时同步脚本、旧版备份与哈希清单在核对后清理。
+
+## 2026-10-20：仅手动调用
+
+用户明确要求仅手动触发。依照 [OpenAI 官方调用策略](https://learn.chatgpt.com/docs/build-skills#optional-metadata)，在 `agents/openai.yaml` 中设置布尔值 `policy.allow_implicit_invocation: false`，保留界面和 `$learning-map` 默认提示；入口描述、正文及规格同步明确手动调用边界。此前“未禁用自动调用”的记录属于初次验证时的状态，已由本次要求变更。
+
+本轮只检查调用配置、元数据、入口格式及安装同步，不重新生成 Wiki 或重复三模式内容试用。宿主是否已刷新既有会话缓存，以及新会话中的实际隐式/显式调用行为，未进行运行验证；配置检查不能冒充宿主行为验证。
+
+实际运行 quick_validate.py 及 YAML 检查，通过入口格式、布尔调用策略、界面字段和显式调用提示验证；Git 空白检查通过。四份修订文件已同步到现有用户级安装目录，并逐文件核对 SHA-256；其余四份运行参考未改。C:/Users/Dong Li/.codex/skills/learning-map 是指向同一安装目录的符号链接，无需维护第二份副本。
